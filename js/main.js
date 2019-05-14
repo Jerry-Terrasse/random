@@ -10,12 +10,12 @@ for (var i = 0; i < arr.length; i++) {  //记录重复，没被抽中即为0，�
     can[i] = 0;
 }
 
-for (var i = 0; i < after; i++) {  //将页面中每个姓名元素输出
+/*for (var i = 0; i < after; i++) {  //将页面中每个姓名元素输出
     var div = document.createElement("div");
     div.innerText = arr[i];
     div.className = "name";
     my$("box").appendChild(div);
-};
+};*/
 
 cnt = after;
 
@@ -24,6 +24,32 @@ else if (tot == -1) tot = after;
 else if (after < tot && cannot_more_than_1) tot = after;
 
 my$("btn").onclick = function () {
+	var peo = after, left = after - cnt + 1 + "";
+	var print = "已读" + left + "条";
+	if (this.value === "Next") {
+		if (cnt > after - tot) toastr.success(print);
+		else {
+			toastr.error('用尽');
+			return;
+		}  //还没开始或还在暂停状态
+		now = parseInt(Math.random() * peo);
+		if (cannot_more_than_1) {
+			while (can[now] == 1) {
+				now = parseInt(Math.random() * peo);  //随机取数直到没有被取过
+			}
+		}
+		this.value = "View Answer";
+		my$("word").style="font-size:5em;text-align:center;";
+		my$("word").innerHTML=arr[now];
+	} else {
+		my$("word").innerHTML=ans[now];
+        can[now] = 1;  //去重
+		cnt = cnt - 1;
+		this.value = "Next";
+	}
+};
+
+/*my$("btn").onclick = function () {
     var peo = after, left = after - cnt + 1 + "";
     var print = "已经抽了" + left + "次";
     if (this.value === "抽奖") {
@@ -59,4 +85,4 @@ my$("btn").onclick = function () {
         usercnt++;
         swal(arr[now], "恭喜你！");
     };
-};
+};*/
